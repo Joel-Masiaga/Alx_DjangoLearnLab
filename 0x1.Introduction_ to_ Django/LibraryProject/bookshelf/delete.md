@@ -2,6 +2,7 @@
 
 ```python
 # Delete the book instance
+from bookshelf.models import Book
 retrieved_book.delete()
 
 # Confirm deletion by trying to retrieve all books
