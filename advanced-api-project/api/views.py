@@ -3,9 +3,9 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import Book
 from .seriealizers import BookSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import serializers
 from .permissions import IsAdminOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 # ListView - Retrieve all books
 class BookListView(generics.ListAPIView):
