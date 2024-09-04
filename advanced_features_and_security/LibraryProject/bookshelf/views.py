@@ -8,6 +8,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
+from django.db.models import Q
+from .forms import BookSearchForm
 
 from .models import Book
 from .forms import BookForm
@@ -119,3 +121,15 @@ def delete_book(request, pk):
         book.delete()
         return redirect('book_list')  
     return render(request, 'relationship_app/delete_book.html', {'book': book})
+
+
+
+
+
+def search_books(request):
+    form = BookSearchForm(request.GET)
+    books = []
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        books = Book.objects.filter(Q(title__icontains=query) | Q(author__name__icontains=query))
+    return render(request, 'search_results.html', {'form': form, 'books': books})

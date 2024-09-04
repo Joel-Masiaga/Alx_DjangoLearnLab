@@ -19,3 +19,25 @@
 ### Testing
 - Create users and assign them to different groups.
 - Verify access control by logging in as users with different roles and attempting to access various parts of the application.
+
+
+
+
+# Security Measures
+
+## Configuration
+- `DEBUG` is set to False for production.
+- CSRF and session cookies are secured with HTTPS.
+- Browser-side protections are enabled with appropriate settings.
+- Content Security Policy (CSP) is configured to prevent XSS attacks.
+
+## Forms
+- All forms include `{% csrf_token %}` to protect against CSRF attacks.
+
+## Views
+- Use of Django ORM for safe database queries.
+- User input is validated and sanitized using Django forms.
+
+## Testing
+- Manually tested forms for CSRF and XSS vulnerabilities.
+- Consider using security tools for comprehensive testing.
