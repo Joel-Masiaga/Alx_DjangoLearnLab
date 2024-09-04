@@ -27,6 +27,19 @@ class LibraryDetailView(DetailView):
 
     
 #Registration, Login, and Logout Views
+# Function-Based View (FBV) for Registration
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('list_books')
+    else:
+        form = UserCreationForm()
+    return render(request, 'relationship_app/register.html', {'form': form})
+
+# Class-Based View (CBV) for Registration
 class UserRegisterView(CreateView):
     template_name = 'relationship_app/register.html'
     form_class = UserCreationForm
@@ -34,12 +47,13 @@ class UserRegisterView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user) 
+        login(self.request, user)
         return redirect(self.success_url)
 
+# Class-Based View (CBV) for Login
 class UserLoginView(LoginView):
     template_name = 'relationship_app/login.html'
 
+# Class-Based View (CBV) for Logout
 class UserLogoutView(LogoutView):
     template_name = 'relationship_app/logout.html'
-
