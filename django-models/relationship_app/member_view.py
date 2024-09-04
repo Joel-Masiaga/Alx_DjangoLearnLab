@@ -5,5 +5,5 @@ def is_member(user):
     return user.userprofile.role == 'Member'
 
 @user_passes_test(is_member)
-def member_view(request):
+def Member(request):
     return render(request, 'member_view.html')
