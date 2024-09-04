@@ -67,14 +67,14 @@ def is_admin(user):
     return user.userprofile.role == 'Admin'
 
 @user_passes_test(is_admin)
-def Admin(request):
+def admin_view(request):
     return render(request, 'admin_view.html')
 
 def is_member(user):
     return user.userprofile.role == 'Member'
 
 @user_passes_test(is_member)
-def Member(request):
+def member_view(request):
     return render(request, 'member_view.html')
 
 def is_librarian(user):
