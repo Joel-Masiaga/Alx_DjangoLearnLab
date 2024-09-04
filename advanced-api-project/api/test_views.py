@@ -1,6 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from .models import Book, Author
 
@@ -12,6 +13,11 @@ class BookAPITests(APITestCase):
         cls.book = Book.objects.create(title="Test Book", publication_year=2022, author=cls.author)
         cls.url_list = reverse('book-list')
         cls.url_detail = reverse('book-detail', args=[cls.book.id])
+        cls.user = User.objects.create_user(username='testuser', password='testpassword')
+        cls.token = Token.objects.create(user=cls.user)
+    
+    def setUp(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
     
     def test_create_book(self):
         data = {
@@ -46,12 +52,11 @@ class BookAPITests(APITestCase):
     
     def test_permissions(self):
         # Test without authentication
+        self.client.credentials()  # Clear any existing credentials
         response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         
-        # Create a user and get token
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.token = Token.objects.create(user=self.user)
+        # Re-authenticate
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         
         # Test with authentication
