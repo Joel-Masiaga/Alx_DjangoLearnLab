@@ -74,3 +74,5 @@ class BookAPITests(APITestCase):
         # Ensure the results are ordered as expected
         books = [book['title'] for book in response.data]
         self.assertEqual(books, sorted(books))
+
+self.client.login
