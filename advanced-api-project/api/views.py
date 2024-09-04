@@ -7,6 +7,9 @@ from rest_framework import serializers
 from .permissions import IsAdminOrReadOnly
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
+from rest_framework import filters
+from rest_framework import viewsets
+
 # ListView - Retrieve all books
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
@@ -44,3 +47,11 @@ class BookDeleteView(generics.DestroyAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAdminOrReadOnly]
 
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filterset_class = BookFilter
+    search_fields = ['title', 'author']
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title'] 
