@@ -13,6 +13,7 @@ from .forms import BookSearchForm
 
 from .models import Book
 from .forms import BookForm
+from .forms import ExampleForm
 from .models import Library
 from django.views.generic.detail import DetailView
 
