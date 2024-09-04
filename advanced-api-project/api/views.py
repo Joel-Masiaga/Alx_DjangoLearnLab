@@ -8,6 +8,7 @@ from .permissions import IsAdminOrReadOnly
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 from rest_framework import filters
+from django_filters import rest_framework
 from rest_framework import viewsets
 
 # ListView - Retrieve all books
