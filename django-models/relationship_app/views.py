@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login
+from django.contrib.auth.decorators import user_passes_test
 
 from .models import Book
 from .models import Library
@@ -57,3 +58,28 @@ class UserLoginView(LoginView):
 # Class-Based View (CBV) for Logout
 class UserLogoutView(LogoutView):
     template_name = 'relationship_app/logout.html'
+
+
+
+
+
+def is_admin(user):
+    return user.userprofile.role == 'Admin'
+
+@user_passes_test(is_admin)
+def Admin(request):
+    return render(request, 'admin_view.html')
+
+def is_member(user):
+    return user.userprofile.role == 'Member'
+
+@user_passes_test(is_member)
+def Member(request):
+    return render(request, 'member_view.html')
+
+def is_librarian(user):
+    return user.userprofile.role == 'Librarian'
+
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'librarian_view.html')
