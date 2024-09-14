@@ -6,15 +6,16 @@
       {% for post in posts %}
         <div class="col-md-6 mb-4">
           <article class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between mb-3">
+            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+             <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
                 <div>
                   <a class="text-primary" href="#">{{ post.author }}</a>
                   <small class="text-muted ml-2">{{ post.published_date }}</small>
                 </div>
               </div>
               <h5 class="card-title">
-                <a class="text-dark" href="#">{{ post.title }}</a>
+                <a class="text-dark" href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
               </h5>
               <p class="card-text">{{ post.content|truncatewords:30 }}</p>
             </div>
