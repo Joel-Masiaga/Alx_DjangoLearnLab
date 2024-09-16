@@ -54,6 +54,18 @@
                         
                     </div>
                 </article>
+                
+
+                <!-- Existing post content -->
+                <div class="tags mt-3">
+                    <h5>Tags:</h5>
+                    {% for tag in post.tags.all %}
+                        <a href="{% url 'posts_by_tag' tag.name %}" class="badge badge-info">{{ tag.name }}</a>
+                    {% empty %}
+                        <p>No tags</p>
+                    {% endfor %}
+                </div>
+                
             </div>
         </div>
     </div>

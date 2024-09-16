@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from .models import Comment
+from .models import Post, Tag
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -35,3 +36,14 @@ class CommentForm(forms.ModelForm):
             if len(content) < 5:
                 raise forms.ValidationError("The comment is too short! Please provide more details.")
             return content
+        
+class PostForm(forms.ModelForm):
+    tags = forms.ModelMultipleChoiceField(
+        queryset = Tag.objects.all(),
+        widget = forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']

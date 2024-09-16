@@ -9,6 +9,9 @@ from .views import (
     PostDeleteView
 )
 
+from .views import search_posts, posts_by_tag
+
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('register/', views.register, name='register'),
@@ -25,6 +28,9 @@ urlpatterns = [
     path('<int:post_id>comments/new/', views.create_comment, name='create_comment'),
     path('comments/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
     path('comments/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
+
+    path('search/', search_posts, name='search_posts'),
+    path('tags/<str:tag_name>/', posts_by_tag, name='posts_by_tag'),
 ]
 
 

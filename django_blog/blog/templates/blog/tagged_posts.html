@@ -1,0 +1,25 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Posts tagged with "{{ tag.name }}"</h2>
+    
+    <!-- Check if there are posts under this tag -->
+    {% if posts %}
+      <div class="list-group">
+        {% for post in posts %}
+          <a href="{% url 'post-detail' post.id %}" class="list-group-item list-group-item-action">
+            <h5 class="mb-1">{{ post.title }}</h5>
+            <p class="mb-1">{{ post.content|slice:":100" }}...</p>
+            <small>{{ post.published_date|date:"F d, Y" }}</small>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No posts found under this tag.</p>
+    {% endif %}
+    
+    <!-- Link to go back to all posts or other sections -->
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Back to All Posts</a>
+  </div>
+{% endblock %}
