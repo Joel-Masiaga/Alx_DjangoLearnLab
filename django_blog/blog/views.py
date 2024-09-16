@@ -21,6 +21,8 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib import messages
 
 
+ #["CommentCreateView", "CommentUpdateView", "CommentDeleteView"]
+
 #Blog Views
 def home(request):
     return render(request, 'blog/home.html')
