@@ -1,6 +1,7 @@
 #Blog Views
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
+from .models import Comment
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView, 
@@ -9,6 +10,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 ) 
+
+from .forms import CommentForm
 
 
 #User views
@@ -30,7 +33,7 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
-
+    context_object_name = 'post'
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -103,3 +106,52 @@ def profile(request):
     }
 
     return render(request, 'blog/profile.html', context)
+
+#Comment View
+@login_required
+def create_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.athour = request.user
+            comment.save()
+            messages.success(request, 'Comment added successfuly')
+            return redirect('post-detail', pk=post.id)
+        
+    else:
+        form = CommentForm()
+    return render(request, 'blog/new_comment.html', {'form': form, 'post': post})
+
+# Edit comment view
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user != comment.author:
+        messages.error(request, 'You do not have permission to edit this comment.')
+        return redirect('post-detail', pk=comment.post.id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Comment updated successfully!')
+            return redirect('post-detail', pk=comment.post.id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'blog/edit_comment.html', {'form': form})
+
+# Delete comment view
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user != comment.author:
+        messages.error(request, 'You do not have permission to delete this comment.')
+        return redirect('post-detail', pk=comment.post.id)
+
+    post_id = comment.post.id
+    comment.delete()
+    messages.success(request, 'Comment deleted successfully!')
+    return redirect('post-detail', pk=post_id)
