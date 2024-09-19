@@ -51,3 +51,5 @@ class PostForm(forms.ModelForm):
         widgets = {
             'tags': TagWidget(attrs={'class': 'form-control'}),
         }
+
+    # TagWidget()
