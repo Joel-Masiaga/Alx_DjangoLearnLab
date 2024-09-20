@@ -28,18 +28,28 @@ class LoginUser(ObtainAuthToken):
         return Response({'token': token.key})
     
 
+
+# Follow User
 class FollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
+        # Get the user to follow, ensuring it exists
         user_to_follow = get_object_or_404(CustomUser, id=user_id)
+        
+        # Add to the following list
         request.user.following.add(user_to_follow)
         return Response({"message": "User followed successfully"}, status=status.HTTP_200_OK)
 
+# Unfollow User
 class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
+        # Get the user to unfollow, ensuring it exists
         user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
+        
+        # Remove from the following list
         request.user.following.remove(user_to_unfollow)
         return Response({"message": "User unfollowed successfully"}, status=status.HTTP_200_OK)
+
