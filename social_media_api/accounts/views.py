@@ -6,6 +6,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from .serializers import UserRegistrationSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from .models import CustomUser
 
 User = get_user_model()
 
@@ -23,3 +26,20 @@ class LoginUser(ObtainAuthToken):
         response = super().post(request, *args, **kwargs)
         token = Token.objects.get(user=response.data['user_id'])
         return Response({'token': token.key})
+    
+
+class FollowUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        user_to_follow = get_object_or_404(CustomUser, id=user_id)
+        request.user.following.add(user_to_follow)
+        return Response({"message": "User followed successfully"}, status=status.HTTP_200_OK)
+
+class UnfollowUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
+        request.user.following.remove(user_to_unfollow)
+        return Response({"message": "User unfollowed successfully"}, status=status.HTTP_200_OK)
