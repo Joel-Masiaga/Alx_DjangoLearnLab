@@ -27,3 +27,5 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         Token.objects.create(user=user)
 
         return user
+
+# ["serializers.CharField()", "get_user_model().objects.create_user"]
