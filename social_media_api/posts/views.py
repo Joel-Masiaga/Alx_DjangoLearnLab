@@ -42,10 +42,12 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class UserFeedView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Get the users that the current user is following
-        followed_users = self.request.user.following.all()
-        return Post.objects.filter(author__in=followed_users).order_by('-created_at')
+        # Get the list of users the current authenticated user is following
+        following_users = self.request.user.following.all()
+
+        # Filter posts by these users and order by creation date (most recent first)
+        return Post.objects.filter(author__in=following_users).order_by('-created_at')
